@@ -215,19 +215,5 @@ fun load() {
 /*
 Archive a contact by index specified by user
  */
-fun archivecontact(){
-    // only list active contacts, as we don't need to archive contacts that have been done so already
-    println(contactAPI.listActivecontacts())
-    if(contactAPI.numberOfActivecontacts() > 0){
-        // The index of the contact to be archived
-        var indexToArchive: Int = readNextInt("Please enter an index of the contact: ")
-        if(contactAPI.isValidIndex(indexToArchive)){
-            contactAPI.archivecontactByIndex(indexToArchive)
-            println("The contact has successfully been archived")
-        } else {
-            println("Index of contact is invalid")
-        }
-    } else {
-        println("There is no active contacts")
-    }
+
 }

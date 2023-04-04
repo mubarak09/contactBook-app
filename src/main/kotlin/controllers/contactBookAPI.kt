@@ -21,7 +21,7 @@ class contactBookAPI(serializerType: Serializer) {
     //Load contacts
     @Throws(Exception::class)
     fun load() {
-        contact = serializer.read() as ArrayList<Contact>
+        contacts = serializer.read() as ArrayList<Contact>
     }
 
     //Store contacts
@@ -31,7 +31,7 @@ class contactBookAPI(serializerType: Serializer) {
     }
 
     fun add(contact: Contact): Boolean {
-        return contact.add(contact)
+        return contacts.add(contact)
     }
 
     fun listAllContacts(): String =
@@ -47,6 +47,29 @@ class contactBookAPI(serializerType: Serializer) {
             contacts[index]
         }else null
     }
+    // method to check if an index is valid in a list.
+    fun isValidListIndex(index: Int, list: List<Any>): Boolean {
+        return (index >= 0 && index < list.size)
+    }
+
+    /*
+    function that will return true if the index passed to it is valid in the Contacts collection
+     */
+    fun isValidIndex(index: Int) :Boolean{
+        return isValidListIndex(index, contacts);
+    }
+
+    /*
+    function for listing all the active Contacts
+
+    * First check if the Contact arraylist is empty or not
+    * Then loop through the ArrayList also checking the isContactArchived variable
+    * If isContactArchived is false then add that Contact to the list that will be returned.
+    * */
+    fun listActiveContacts(): String =
+        if(numberOfActiveContacts() == 0) "No active Contacts stored"
+        else formatListString(contacts.filter { Contact -> !Contact.isContactArchived })
+
 
     // method for listing all the Archived contacts
     /*
@@ -54,32 +77,32 @@ class contactBookAPI(serializerType: Serializer) {
     * Then loop through the ArrayList also checking the iscontactArchived variable
     * If iscontactArchived is true then add that contact to the list that will be returned.
     * */
-    fun listArchivedcontacts(): String =
-        if(numberOfArchivedcontacts() == 0) "No archived contacts stored"
-        else formatListString(contacts.filter { contact -> contact.iscontactArchived })
+    fun listArchivedContacts(): String =
+        if(numberOfArchivedContacts() == 0) "No archived contacts stored"
+        else formatListString(contacts.filter { contact -> contact.isContactArchived })
 
-    fun numberOfArchivedcontacts(): Int = contacts.count {contact : contact -> contact.iscontactArchived}
+    fun numberOfArchivedContacts(): Int = contacts.count {contact : Contact -> contact.isContactArchived}
 
-    fun numberOfActivecontacts(): Int = contacts.count{ contact: contact -> !contact.iscontactArchived}
+    fun numberOfActiveContacts(): Int = contacts.count{ contact: Contact -> !contact.isContactArchived}
 
 
     fun searchByTitle(searchString: String) =
         formatListString(contacts.filter { contact -> contact.contactTitle.contains(searchString, ignoreCase = true) })
 
-    fun listcontactsBySelectedPriority(priority: Int): String =
+    fun listContactsBySelectedPriority(priority: Int): String =
         if (contacts.isEmpty()) "No contacts stored"
         else {
             val listOfcontacts = formatListString(contacts.filter { contact -> contact.contactPriority == priority })
             if (listOfcontacts.equals("")) "No contacts stored with priority: $priority"
-            else "${numberOfcontactsByPriority(priority)} contacts with priority $priority: $listOfcontacts\""
+            else "${numberOfContactsByPriority(priority)} contacts with priority $priority: $listOfcontacts\""
         }
 
-    fun numberOfcontactsByPriority(priority: Int): Int =
+    fun numberOfContactsByPriority(priority: Int): Int =
         if (contacts.isEmpty()) 0
         else contacts.count { it.contactPriority ==  priority}
 
     // Delete a contact from the collection of contacts, while also checking if the index is valid
-    fun deletecontact(indexToDelete: Int): contact? {
+    fun deleteContact(indexToDelete: Int): Contact? {
         return if (isValidListIndex(indexToDelete, contacts)) {
             contacts.removeAt(indexToDelete)
         } else null
@@ -90,15 +113,15 @@ class contactBookAPI(serializerType: Serializer) {
     Index of the contact to be updated is passed
     And the new contact is also passed which will be stored in the same index
      */
-    fun updatecontact(indexToUpdate: Int, contact: contact?): Boolean {
+    fun updateContact(indexToUpdate: Int, contact: Contact?): Boolean {
         //find the contact object by the index number
-        val foundcontact = findcontact(indexToUpdate)
+        val foundContact = findContact(indexToUpdate)
 
         //if the contact exists, use the contact details passed as parameters to update the found contact in the ArrayList.
-        if ((foundcontact != null) && (contact != null)) {
-            foundcontact.contactTitle = contact.contactTitle
-            foundcontact.contactPriority = contact.contactPriority
-            foundcontact.contactCategory = contact.contactCategory
+        if ((foundContact != null) && (contact != null)) {
+            foundContact.contactTitle = contact.contactTitle
+            foundContact.contactPriority = contact.contactPriority
+            foundContact.contactCategory = contact.contactCategory
             return true
         }
 
@@ -110,18 +133,18 @@ class contactBookAPI(serializerType: Serializer) {
     Archive a contact
     get index of contact passed, get contact by the index and set iscontactArchived = true
      */
-    fun archivecontactByIndex(indexToArchive: Int): Boolean{
-        val contactToArchive = findcontact(indexToArchive)
+    fun archiveContactByIndex(indexToArchive: Int): Boolean{
+        val contactToArchive = findContact(indexToArchive)
         if (contactToArchive != null) {
-            contactToArchive.iscontactArchived = true
+            contactToArchive.isContactArchived = true
             return true
         }
         return false
     }
 
-    fun sortcontactByDate(): String {
-        val sortedcontacts = contacts.sortedByDescending { it.contactTimeStamp }
-        return formatListString(sortedcontacts)
+    fun sortContactByDate(): String {
+        val sortedContacts = contacts.sortedByDescending { it.contactTimeStamp }
+        return formatListString(sortedContacts)
     }
 
 
@@ -129,19 +152,19 @@ class contactBookAPI(serializerType: Serializer) {
     /**
      * Returns a string representation of all contacts filtered by month.
      */
-    fun listcontactsByMonth(month: String): String {
+    fun listContactsByMonth(month: String): String {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
-        val filteredcontacts = contacts.filter { contact ->
+        val filteredContacts = contacts.filter { contact ->
             LocalDateTime.parse(contact.contactTimeStamp, formatter).month.toString().equals(month, ignoreCase = true)
         }
         if (contacts.isEmpty()) {
             return "No contacts stored"
         }
-        if (filteredcontacts.isEmpty()) {
+        if (filteredContacts.isEmpty()) {
             return "There are no contacts available for the specified month"
         }
         val stringBuilder = StringBuilder()
-        filteredcontacts.forEachIndexed { index, contact ->
+        filteredContacts.forEachIndexed { index, contact ->
             stringBuilder.append("$index : $contact")
         }
         return stringBuilder.toString()
@@ -150,7 +173,7 @@ class contactBookAPI(serializerType: Serializer) {
     /**
      * Returns a string representation of contacts sorted by year for a given year.
      */
-    fun listcontactsByYear(year: Int): String {
+    fun listContactsByYear(year: Int): String {
         val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
 
         // Check if there are any contacts available
@@ -158,15 +181,15 @@ class contactBookAPI(serializerType: Serializer) {
             return "No contacts stored"
         }
         // Filter contacts by year using the filter function with a lambda expression
-        val filteredcontacts = contacts.filter { contact ->
+        val filteredContacts = contacts.filter { contact ->
             LocalDateTime.parse(contact.contactTimeStamp, formatter).year == year
         }
         // Check if there are any contacts available for the specified year
-        if (filteredcontacts.isEmpty()) {
+        if (filteredContacts.isEmpty()) {
             return "There are no contacts available for the specified year"
         }
         // Sort filtered contacts by year using the sortedBy function with a lambda expression
-        val sortedcontacts = filteredcontacts.sortedBy { contact ->
+        val sortedcontacts = filteredContacts.sortedBy { contact ->
             LocalDateTime.parse(contact.contactTimeStamp, formatter).year
         }
         // Build a string representation of the sorted contacts using a StringBuilder

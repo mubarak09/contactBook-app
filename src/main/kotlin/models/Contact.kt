@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class Contact (var contactTitle: String,
                     var contactPriority: Int,
                     var contactCategory: String,
-                    var iscontactArchived :Boolean,
+                    var isContactArchived :Boolean,
                     val contactTimeStamp : String
 ){
     

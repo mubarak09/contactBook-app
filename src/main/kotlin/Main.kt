@@ -74,7 +74,7 @@ fun addcontact(){
     val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm")
     val contactTimeStamp = LocalDateTime.now().format(formatter)
 
-    val isAdded = contactAPI.add(contact(contactTitle, contactPriority, contactCategory, false, contactTimeStamp))
+    val isAdded = contactAPI.add(Contact(contactTitle, contactPriority, contactCategory, false, contactTimeStamp))
 
     if (isAdded) {
         println("Added Successfully")
@@ -86,13 +86,13 @@ fun addcontact(){
 
 fun listcontacts(){
     //logger.info{ "listcontacts() function invoked"}
-    println(contactAPI.listAllcontacts())
+    println(contactAPI.listAllContacts())
 }
 
 fun updatecontact() {
     //logger.info { "updatecontacts() function invoked" }
     listcontacts()
-    if (contactAPI.numberOfcontacts() > 0) {
+    if (contactAPI.numberOfContacts() > 0) {
         //only ask the user to choose the contact if contacts exist
         val indexToUpdate = readNextInt("Enter the index of the contact to update: ")
         if (contactAPI.isValidIndex(indexToUpdate)) {
@@ -104,7 +104,7 @@ fun updatecontact() {
             val contactTimeStamp = LocalDateTime.now().format(formatter)
 
             //pass the index of the contact and the new contact details to contactAPI for updating and check for success.
-            if (contactAPI.updatecontact(indexToUpdate, contact(contactTitle, contactPriority, contactCategory, false, contactTimeStamp))){
+            if (contactAPI.updateContact(indexToUpdate, Contact(contactTitle, contactPriority, contactCategory, false, contactTimeStamp))){
                 println("Update Successful")
             } else {
                 println("Update Failed")
@@ -129,11 +129,11 @@ fun Searchcontacts() {
 fun deletecontact(){
     //logger.info { "deletecontacts() function invoked" }
     listcontacts()
-    if (contactAPI.numberOfcontacts() > 0) {
+    if (contactAPI.numberOfContacts() > 0) {
         //only ask the user to choose the contact to delete if contacts exist
         val indexToDelete = readNextInt("Enter the index of the contact to delete: ")
         //pass the index of the contact to contactAPI for deleting and check for success.
-        val contactToDelete = contactAPI.deletecontact(indexToDelete)
+        val contactToDelete = contactAPI.deleteContact(indexToDelete)
         if (contactToDelete != null) {
             println("Delete Successful! Deleted contact: ${contactToDelete.contactTitle}")
         } else {
@@ -179,11 +179,11 @@ fun listcontactsSubmenu(){
         val option = subMenu()
         when (option) {
             1 -> listcontacts()
-            2 -> println(contactAPI.listActivecontacts())
-            3 -> println(contactAPI.listArchivedcontacts())
-            4 -> println(contactAPI.listcontactsBySelectedPriority(readNextInt("Please Enter a contact Priority to List: ")))
-            5 -> println(contactAPI.listcontactsByMonth(readNextLine("Please enter a month to search contacts, example 'march': ")))
-            6 -> println(contactAPI.listcontactsByYear(readNextInt("Please enter a year to search contacts, example '2023': ")))
+            2 -> println(contactAPI.listActiveContacts())
+            3 -> println(contactAPI.listArchivedContacts())
+            4 -> println(contactAPI.listContactsBySelectedPriority(readNextInt("Please Enter a contact Priority to List: ")))
+            5 -> println(contactAPI.listContactsByMonth(readNextLine("Please enter a month to search contacts, example 'march': ")))
+            6 -> println(contactAPI.listContactsByYear(readNextInt("Please enter a year to search contacts, example '2023': ")))
             7 -> listcontactsByDate()
             0 -> runMenu()
             else -> println("Invalid option entered: ${option}")
@@ -200,7 +200,7 @@ fun save() {
 }
 
 fun listcontactsByDate(){
-    val contacts = contactAPI.sortcontactByDate()
+    val contacts = contactAPI.sortContactByDate()
     println(contacts)
 }
 
@@ -217,12 +217,12 @@ Archive a contact by index specified by user
  */
 fun archivecontact(){
     // only list active contacts, as we don't need to archive contacts that have been done so already
-    println(contactAPI.listActivecontacts())
-    if(contactAPI.numberOfActivecontacts() > 0){
+    println(contactAPI.listActiveContacts())
+    if(contactAPI.numberOfActiveContacts() > 0){
         // The index of the contact to be archived
         var indexToArchive: Int = readNextInt("Please enter an index of the contact: ")
         if(contactAPI.isValidIndex(indexToArchive)){
-            contactAPI.archivecontactByIndex(indexToArchive)
+            contactAPI.archiveContactByIndex(indexToArchive)
             println("The contact has successfully been archived")
         } else {
             println("Index of contact is invalid")

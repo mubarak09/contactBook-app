@@ -116,7 +116,7 @@ fun updatecontact() {
 }
 
 fun Searchcontacts() {
-    val searchTitle = readNextLine("Enter the title to search by: ")
+    val searchTitle = readNextLine("Enter the title to search by= ")
     val searchResults = contactAPI.searchByTitle(searchTitle)
     if(searchTitle.isEmpty()){
         println("No contacts found")

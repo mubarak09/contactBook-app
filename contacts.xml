@@ -1,0 +1,25 @@
+<object-stream>
+  <list>
+    <models.Contact>
+      <contactTitle>Test App</contactTitle>
+      <contactPriority>4</contactPriority>
+      <contactCategory>Work</contactCategory>
+      <isContactArchived>false</isContactArchived>
+      <contactTimeStamp>0</contactTimeStamp>
+    </models.Contact>
+    <models.Contact>
+      <contactTitle>Swim - Pool</contactTitle>
+      <contactPriority>3</contactPriority>
+      <contactCategory>Hobby</contactCategory>
+      <isContactArchived>false</isContactArchived>
+      <contactTimeStamp>0</contactTimeStamp>
+    </models.Contact>
+    <models.Contact>
+      <contactTitle>Summer Holiday to France</contactTitle>
+      <contactPriority>1</contactPriority>
+      <contactCategory>Holiday</contactCategory>
+      <isContactArchived>false</isContactArchived>
+      <contactTimeStamp>0</contactTimeStamp>
+    </models.Contact>
+  </list>
+</object-stream>

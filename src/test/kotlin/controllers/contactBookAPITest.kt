@@ -169,6 +169,38 @@ class contactBookAPITest {
         }
     }
 
+    @Nested
+    inner class CountingMethods {
+
+        @Test
+        fun numberOfContactsCalculatedCorrectly() {
+            assertEquals(5, populatedContacts!!.numberOfContacts())
+            assertEquals(0, emptyContacts!!.numberOfContacts())
+        }
+
+        @Test
+        fun numberOfArchivedContactsCalculatedCorrectly() {
+            assertEquals(2, populatedContacts!!.numberOfArchivedContacts())
+            assertEquals(0, emptyContacts!!.numberOfArchivedContacts())
+        }
+
+        @Test
+        fun numberOfActiveContactsCalculatedCorrectly() {
+            assertEquals(3, populatedContacts!!.numberOfActiveContacts())
+            assertEquals(0, emptyContacts!!.numberOfActiveContacts())
+        }
+
+        @Test
+        fun numberOfContactByPriorityCalculatedCorrectly() {
+            assertEquals(1, populatedContacts!!.numberOfContactsByPriority(1))
+            assertEquals(0, populatedContacts!!.numberOfContactsByPriority(2))
+            assertEquals(1, populatedContacts!!.numberOfContactsByPriority(3))
+            assertEquals(2, populatedContacts!!.numberOfContactsByPriority(4))
+            assertEquals(1, populatedContacts!!.numberOfContactsByPriority(5))
+            assertEquals(0, emptyContacts!!.numberOfContactsByPriority(1))
+        }
+    }
+
 
 
 }

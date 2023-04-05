@@ -8,4 +8,6 @@
 /httpRequests/
 # Generated IntelliJ Sources
 /build
+# Generated Gradle Sources
+/.gradle
 
